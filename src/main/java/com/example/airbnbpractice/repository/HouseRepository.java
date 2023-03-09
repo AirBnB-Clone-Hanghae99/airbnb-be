@@ -3,6 +3,7 @@ package com.example.airbnbpractice.repository;
 import com.example.airbnbpractice.entity.House;
 import com.example.airbnbpractice.entity.HouseWish;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -27,6 +28,9 @@ public interface HouseRepository extends JpaRepository<House, Long> {
             "(:startDate >= r.checkin AND :startDate <= r.checkout) OR " +
             "(:endDate >= r.checkin AND :endDate <= r.checkout) OR " +
             "(:startDate <= r.checkin AND :endDate >= r.checkout))))")
+    @EntityGraph(attributePaths = {
+            "owner", "houseImages", "wishHouses", "houseTags", "houseTags.tag", "houseTags.tag.tagType"
+    })
     List<House> searchHomes(String adminDistrict, Integer peopleCount,
                             Integer minPrice, Integer maxPrice,
                             LocalDate startDate, LocalDate endDate, Pageable pageable);
