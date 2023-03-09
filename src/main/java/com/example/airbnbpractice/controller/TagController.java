@@ -29,21 +29,22 @@ public class TagController {
 
     private final TagService tagService;
 
-    @PostMapping(value = "/{tagTypeId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Secured(UserRoleEnum.Authority.ADMIN)
     @Operation(summary = "태그 추가", description = "태그를 추가합니다. 태그는 각 태그타입에 매칭해서 분류해야합니다." +
             "예를 들어, 샴푸, 린스 등은 '욕실'태그타입에 매칭합니다.")
-    public ResponseDto<TagResponseDto> addTag(@PathVariable Long tagTypeId,
-                                              @ModelAttribute TagRequestDto tagRequestDto){
-        TagResponseDto td = tagService.addTag(tagTypeId, tagRequestDto);
+    public ResponseDto<TagResponseDto> addTag(@ModelAttribute TagRequestDto tagRequestDto){
+        TagResponseDto td = tagService.addTag(tagRequestDto);
         return ResponseDto.of(HttpStatus.OK,"태그 등록에 성공하였습니다",td);
     }
+
     @PutMapping("/{tagId}")
     @Secured(UserRoleEnum.Authority.ADMIN)
     public ResponseDto<TagResponseDto> updateTag(@PathVariable Long tagId, @RequestBody TagRequestDto tagRequestDto){
         TagResponseDto td = tagService.updateTag(tagId, tagRequestDto);
         return ResponseDto.of(HttpStatus.OK,"태그 수정에 성공하였습니다",td);
     }
+
     @DeleteMapping("/{tagId}")
     @Secured(UserRoleEnum.Authority.ADMIN)
     public ResponseDto deleteTag(@PathVariable Long tagId){
