@@ -23,8 +23,11 @@ public class TagService {
     private final TagTypeRepository tagTypeRepository;
     private final TagRepository tagRepository;
     @Transactional
-    public TagResponseDto addTag(Long tagTypeId, TagRequestDto tagRequestDto) {
-        TagType tagType = tagTypeRepository.findById(tagTypeId).orElseThrow(()-> CustomClientException.of(ErrorMessage.NO_TAGTYPE));
+    public TagResponseDto addTag(TagRequestDto tagRequestDto) {
+        TagType tagType = tagTypeRepository.findById(tagRequestDto.getTagTypeId()).orElseThrow(
+                ()-> CustomClientException.of(ErrorMessage.NO_TAGTYPE)
+        );
+
         String tagImageUrl = s3Service.uploadSingle(tagRequestDto.getImageFile());
         Tag tag = tagRepository.save(new Tag(tagRequestDto, tagImageUrl, tagType));
         return TagResponseDto.of(tag);
@@ -35,4 +38,28 @@ public class TagService {
     }
 
 
+
+    @Transactional
+    public TagResponseDto updateTag(Long tagId, TagRequestDto tagRequestDto) {
+        TagType tagType = tagTypeRepository.findById(tagRequestDto.getTagTypeId()).orElseThrow(
+                ()-> CustomClientException.of(ErrorMessage.NO_TAGTYPE)
+        );
+
+        Tag tag = tagRepository.findById(tagId).orElseThrow(
+                ()-> CustomClientException.of(ErrorMessage.NO_TAG)
+        );
+
+        String tagImageUrl = s3Service.uploadSingle(tagRequestDto.getImageFile());
+
+        tag.update(tagRequestDto, tagType, tagImageUrl);
+
+        return TagResponseDto.of(tag);
+    }
+
+
+    @Transactional
+    public void deleteTag(Long tagId) {
+        Tag tag = tagRepository.findById(tagId).orElseThrow(()-> CustomClientException.of(ErrorMessage.NO_TAG));
+        tagRepository.delete(tag);
+    }
 }

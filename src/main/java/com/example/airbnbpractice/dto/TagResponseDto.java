@@ -26,4 +26,12 @@ public class TagResponseDto {
                 .tagType(TagTypeResponseDto.of(tag.getTagType()))
                 .build();
     }
+
+    public static TagResponseDto ofNoTagType(Tag tag) {
+        return TagResponseDto.builder()
+                .imageURL(tag.getImageURL())
+                .name(tag.getName())
+                .id(tag.getId())
+                .build();
+    }
 }

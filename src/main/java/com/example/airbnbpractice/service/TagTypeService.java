@@ -45,7 +45,7 @@ public class TagTypeService {
         House house = houseRepository.findById(houseId).orElseThrow(
                 () -> CustomClientException.of(ErrorMessage.NO_HOUSE)
         );
-        return tagTypeRepository.findByTags_HouseTags_House(house).stream().map(TagTypeReadDto::of).toList();
+        return tagTypeRepository.findTagTypeByHouseIdJPQL(house.getId()).stream().map(TagTypeReadDto::of).toList();
     }
 
     @Transactional

@@ -22,7 +22,7 @@ public class TagTypeReadDto {
         return TagTypeReadDto.builder()
                 .id(tagType.getId())
                 .name(tagType.getName())
-                .tags(tagType.getTags().stream().map(TagResponseDto::of).toList())
+                .tags(tagType.getTags().stream().map(TagResponseDto::ofNoTagType).toList())
                 .build();
     }
 }
