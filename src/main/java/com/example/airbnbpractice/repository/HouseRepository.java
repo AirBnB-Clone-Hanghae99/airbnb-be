@@ -1,6 +1,7 @@
 package com.example.airbnbpractice.repository;
 
 import com.example.airbnbpractice.entity.House;
+import com.example.airbnbpractice.entity.HouseWish;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,4 +30,13 @@ public interface HouseRepository extends JpaRepository<House, Long> {
     List<House> searchHomes(String adminDistrict, Integer peopleCount,
                             Integer minPrice, Integer maxPrice,
                             LocalDate startDate, LocalDate endDate, Pageable pageable);
+
+
+
+    @Query("select CASE WHEN COUNT(h.id) > 0 THEN true ELSE false END from houses h WHERE h.id = :houseId AND " +
+            "NOT EXISTS (SELECT r FROM reservations r WHERE r.house.id = h.id " +
+            "AND ((:startDate >= r.checkin AND :startDate <= r.checkout) " +
+            "OR (:endDate >= r.checkin AND :endDate <= r.checkout) " +
+            "OR (:startDate <= r.checkin AND :endDate >= r.checkout)))")
+    Boolean checkReservedHouse(Long houseId);
 }

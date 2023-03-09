@@ -28,6 +28,10 @@ public class ReservationService {
                 () -> CustomClientException.of(ErrorMessage.NO_HOUSE)
         );
 
+        if (!houseRepository.checkReservedHouse(house.getId())) {
+            throw CustomClientException.of(ErrorMessage.ALREADY_RESERVED);
+        }
+
         if (dto.getPeopleCount() > house.getMaxPeople()) {
             throw CustomClientException.of(ErrorMessage.OVER_MAX_PEOPLE);
         }

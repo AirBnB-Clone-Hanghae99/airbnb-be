@@ -10,6 +10,7 @@ public enum ErrorMessage {
     NOT_NULL("필수값이 누락되었습니다"),
     PATTERN("잘못된 양식의 값이 있습니다."),
     TOKEN_ERROR("토큰이 유효하지 않습니다."),
+    ALREADY_RESERVED("해당 날짜는 이미 예악이 되어있습니다."),
     S3_UPLOAD_ERROR("이미지 업로드 실패"),
     DUPLE_USER("이미 가입된 유저가 있습니다."),
     EDIT_REJECT("수정할 권한이 없습니다."),
