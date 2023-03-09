@@ -35,8 +35,8 @@ public interface HouseRepository extends JpaRepository<House, Long> {
 
     @Query("select CASE WHEN COUNT(h.id) > 0 THEN true ELSE false END from houses h WHERE h.id = :houseId AND " +
             "NOT EXISTS (SELECT r FROM reservations r WHERE r.house.id = h.id " +
-            "AND ((:startDate >= r.checkin AND :startDate <= r.checkout) " +
-            "OR (:endDate >= r.checkin AND :endDate <= r.checkout) " +
-            "OR (:startDate <= r.checkin AND :endDate >= r.checkout)))")
-    Boolean checkReservedHouse(Long houseId);
+            "AND ((:checkIn >= r.checkin AND :checkIn <= r.checkout) " +
+            "OR (:checkOut >= r.checkin AND :checkOut <= r.checkout) " +
+            "OR (:checkIn <= r.checkin AND :checkOut >= r.checkout)))")
+    Boolean checkReservedHouse(Long houseId, LocalDate checkIn, LocalDate checkOut);
 }

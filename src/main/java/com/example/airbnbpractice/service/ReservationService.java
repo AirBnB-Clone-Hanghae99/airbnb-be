@@ -28,7 +28,7 @@ public class ReservationService {
                 () -> CustomClientException.of(ErrorMessage.NO_HOUSE)
         );
 
-        if (!houseRepository.checkReservedHouse(house.getId())) {
+        if (!houseRepository.checkReservedHouse(house.getId(), dto.getCheckin(), dto.getCheckout())) {
             throw CustomClientException.of(ErrorMessage.ALREADY_RESERVED);
         }
 
